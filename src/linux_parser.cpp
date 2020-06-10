@@ -92,7 +92,7 @@ float LinuxParser::MemoryUtilization() {
   return ((float)(memTotal - memFree) / (float)memTotal);
 }
 
-// TODO: Reads and returns the system uptime
+// Reads and returns the system uptime
 long LinuxParser::UpTime() {
   string line;
   long value;
@@ -113,8 +113,7 @@ long LinuxParser::Jiffies() {
   return LinuxParser::ActiveJiffies() + LinuxParser::IdleJiffies();
 }
 
-// TODO: Read and return the number of active jiffies for a PID
-// REMOVE: [[maybe_unused]] once you define the function
+// Reads and returns the number of active jiffies for a PID
 long LinuxParser::ActiveJiffies(int pid) {
   std::string line;
   long utime;
@@ -151,13 +150,12 @@ long LinuxParser::IdleJiffies() {
   return idle;
 }
 
-// TODO: Reads and returns CPU utilization
+// Reads and returns CPU utilization
 vector<long> LinuxParser::CpuUtilization() { 
   std::string line;
   std::string cpuname;
   std::vector<long> cpu;
   long temp;
-  long user, nice, system, idle, iowait, irq, softirq, steal, guest, guest_nice;
   std::ifstream filestream(kProcDirectory + kStatFilename);
   if (filestream.is_open()) {
     std::getline(filestream, line);
@@ -293,8 +291,7 @@ string LinuxParser::User(int pid) {
   return string(); 
 }
 
-// TODO: Read and return the uptime of a process
-// REMOVE: [[maybe_unused]] once you define the function
+// Reads and returns the uptime of a process
 long LinuxParser::UpTime(int pid) {
   long sysuptime = LinuxParser::UpTime();
 

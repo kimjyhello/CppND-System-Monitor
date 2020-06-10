@@ -23,12 +23,11 @@ vector<Process>& System::Processes() {
     processes_ = {};
 
     for (int pid : pids) {
-        Process& process(pid);
-        processes_.push_back(process);
+        Process process(pid);
+        processes_.emplace_back(Process(pid));
     }
 
-    sort(processes_.begin(), processes_.end(), 
-        [](Process const &a, Process const &b) {return a < b;});
+    sort(processes_.begin(), processes_.end());
     return processes_; 
 }
 

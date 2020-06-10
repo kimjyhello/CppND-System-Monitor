@@ -15,41 +15,12 @@ using std::vector;
 int Process::Pid() { return pid_; }
 
 // Returns this process's CPU utilization
-float Process::CpuUtilization() {
+float Process::CpuUtilization() const {
     long total_time = LinuxParser::ActiveJiffies(pid_);
     float seconds = Process::UpTime();
-    cpuutilization_ = 100 * ((total_time / sysconf(_SC_CLK_TCK)) / seconds);
-    return cpuutilization_;
-
-/*
-    std::string line;
-    long utime;
-    long stime;
-    long cutime;
-    long cstime;
-    long starttime;
-    string a;
-
-    std::ifstream filestream(LinuxParser::kProcDirectory + '/' + to_string(pid_) + LinuxParser::kStatFilename);
-    if (filestream.is_open()) {
-        std::getline(filestream, line);
-        std::istringstream linestream(line);
-        if (linestream >> a >> a >> a >> a >> a >>
-            a >> a >> a >> a >> a >>
-            a >> a >> a >> utime >> stime >>
-            cutime >> cstime) {
-            int total_time = utime + stime;
-            total_time += cutime + cstime;
-            float seconds = Process::UpTime(); // - (starttime / sysconf(_SC_CLK_TCK));
-
-            float cpu_usage = 100 * ((total_time / sysconf(_SC_CLK_TCK)) / seconds);
-            cpuutilization_ = cpu_usage;
-            return cpu_usage;
-        }
-
-    }
-    return 0.0; */
-
+    return ((total_time / sysconf(_SC_CLK_TCK)) / seconds);
+    //cpuutilization_ = ((total_time / sysconf(_SC_CLK_TCK)) / seconds);
+    //return cpuutilization_;
 }
 
 // Returns the command that generated this process
@@ -71,17 +42,12 @@ string Process::User() {
 }
 
 // Returns the age of this process (in seconds)
-long int Process::UpTime() {
+long int Process::UpTime() const {
     return LinuxParser::UpTime(pid_);
 }
 
-float Process::Cpu() const {
-    return cpuutilization_;
-}
-
-// TODO: Overload the "less than" comparison operator for Process objects
-// REMOVE: [[maybe_unused]] once you define the function
+// Overloads the "less than" comparison operator for Process objects
 bool Process::operator<(Process const& a) const {
-    return (this->Cpu() < a.Cpu());
-//     return true; 
+    //return true;
+    return (this->CpuUtilization() > a.CpuUtilization());
 }
